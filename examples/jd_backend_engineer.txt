@@ -1,0 +1,35 @@
+Senior Backend Engineer — Payments Infrastructure
+FinCore Technologies
+
+About the Role
+FinCore Technologies is building the next generation of B2B payment rails. We're looking
+for a Senior Backend Engineer to join our Payments Infrastructure team and help us scale
+our transaction processing system to handle 100,000+ events/second reliably.
+
+What You'll Do
+- Design and build high-throughput payment processing APIs using Python (FastAPI or similar)
+- Own and evolve our Kafka-based event pipeline from ingestion to settlement
+- Work closely with the data team to ensure reliable, low-latency delivery of transaction
+  events to downstream consumers
+- Define and defend SLOs for critical payment services; participate in on-call rotation
+- Write and maintain PostgreSQL schemas and query optimization for transaction history
+- Mentor junior engineers and lead technical design reviews
+
+Must-Have
+- 4+ years of backend engineering experience, primarily in Python
+- Strong experience with event-driven architecture (Kafka, Kinesis, or equivalent)
+- PostgreSQL or another relational database at scale — query tuning, indexing, migrations
+- Comfort with distributed systems trade-offs (consistency, availability, idempotency)
+- Experience designing and shipping production REST APIs
+
+Nice-to-Have
+- Prior experience in fintech or payments
+- Go for performance-critical services
+- Redis for caching or rate limiting
+- Familiarity with AWS (ECS, RDS, MSK)
+- Experience building internal developer tooling
+
+We Do Not Require
+- Machine learning or data science background
+- Mobile or frontend development
+- Kubernetes cluster administration

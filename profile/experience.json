@@ -1,0 +1,72 @@
+[
+  {
+    "id": "exp-apex-swe",
+    "company": "Apex Fintech",
+    "title": "Software Engineer",
+    "start_date": "2022-03",
+    "end_date": null,
+    "location": "San Francisco, CA",
+    "bullets": [
+      {
+        "id": "exp-apex-swe-b1",
+        "text": "Redesigned the transaction ingestion pipeline using Kafka and Python asyncio, reducing end-to-end latency by 40% at 10,000 events/second."
+      },
+      {
+        "id": "exp-apex-swe-b2",
+        "text": "Maintained 99.9% API uptime across 12 microservices by introducing structured error budgets and automated rollback on SLO breach."
+      },
+      {
+        "id": "exp-apex-swe-b3",
+        "text": "Led migration of the core account-ledger service from a monolithic Django app to FastAPI microservices, cutting p99 response time from 800ms to 120ms."
+      },
+      {
+        "id": "exp-apex-swe-b4",
+        "text": "Shipped a self-serve internal tooling API used by 30+ analysts to query transaction data without filing engineering tickets."
+      },
+      {
+        "id": "exp-apex-swe-b5",
+        "text": "Designed and owned PostgreSQL schema migrations for the payments ledger, managing 80+ migrations across 4 environments with zero downtime."
+      }
+    ]
+  },
+  {
+    "id": "exp-datastream-be",
+    "company": "Datastream Inc.",
+    "title": "Backend Engineer",
+    "start_date": "2020-06",
+    "end_date": "2022-02",
+    "location": "Remote",
+    "bullets": [
+      {
+        "id": "exp-datastream-be-b1",
+        "text": "Built a streaming data ingestion service in Go and gRPC that processed 50 GB/day of customer event data with under 200ms tail latency."
+      },
+      {
+        "id": "exp-datastream-be-b2",
+        "text": "Replaced a polling-based ETL job with a Redis Streams consumer, cutting infrastructure costs by 35% and eliminating a class of duplicate-event bugs."
+      },
+      {
+        "id": "exp-datastream-be-b3",
+        "text": "Wrote integration and contract tests that reduced the production incident rate by half over six months."
+      }
+    ]
+  },
+  {
+    "id": "exp-webcraft-jr",
+    "company": "Webcraft Agency",
+    "title": "Junior Developer",
+    "start_date": "2019-01",
+    "end_date": "2020-05",
+    "location": "Austin, TX",
+    "bullets": [
+      {
+        "id": "exp-webcraft-jr-b1",
+        "text": "Developed REST APIs with Django and PostgreSQL for 5 client projects, each delivered on schedule."
+      },
+      {
+        "id": "exp-webcraft-jr-b2",
+        "text": "Introduced automated linting and pre-commit hooks, reducing code review cycle time by roughly 20%."
+      }
+    ]
+  }
+]

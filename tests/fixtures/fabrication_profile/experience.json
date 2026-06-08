@@ -1,0 +1,20 @@
+[
+  {
+    "id": "exp-apex-swe",
+    "company": "Apex Fintech",
+    "title": "Software Engineer",
+    "start_date": "2022-03",
+    "end_date": null,
+    "location": "San Francisco, CA",
+    "bullets": [
+      {
+        "id": "exp-apex-swe-b1",
+        "text": "Redesigned the transaction ingestion pipeline using Kafka and Python asyncio, reducing end-to-end latency by 40% at 10,000 events/second."
+      },
+      {
+        "id": "exp-apex-swe-b2",
+        "text": "Maintained 99.9% API uptime across 12 microservices by introducing structured error budgets and automated rollback on SLO breach."
+      }
+    ]
+  }
+]

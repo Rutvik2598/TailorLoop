@@ -1,0 +1,41 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[top=1in, bottom=1in, left=1.25in, right=1.25in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[colorlinks=true, urlcolor=black, linkcolor=black]{hyperref}
+\usepackage{microtype}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{10pt}
+
+\begin{document}
+
+% ── Sender header ────────────────────────────────────────────────────────────
+\textbf{\VAR{profile.name | e}}\\
+\small
+\BLOCK{if profile.email}\href{mailto:\VAR{profile.email}}{\VAR{profile.email | e}}\BLOCK{endif}%
+\BLOCK{if profile.phone} \textbullet{} \VAR{profile.phone | e}\BLOCK{endif}%
+\BLOCK{if profile.location} \textbullet{} \VAR{profile.location | e}\BLOCK{endif}%
+\BLOCK{if profile.linkedin} \textbullet{} \href{https://\VAR{profile.linkedin}}{\VAR{profile.linkedin | e}}\BLOCK{endif}
+
+\normalsize
+\bigskip
+
+% ── Salutation ───────────────────────────────────────────────────────────────
+Dear Hiring Manager at \VAR{company | e},
+
+% ── Body paragraphs ──────────────────────────────────────────────────────────
+\BLOCK{for para in paragraphs}
+\VAR{para | e}
+
+\BLOCK{endfor}
+
+% ── Closing ──────────────────────────────────────────────────────────────────
+Sincerely,
+
+\bigskip
+\VAR{profile.name | e}
+
+\end{document}

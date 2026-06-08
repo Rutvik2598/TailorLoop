@@ -1,0 +1,19 @@
+Senior Backend Engineer — Data Platform
+NeuralPipe Inc.
+
+We're building a real-time data platform that powers both transactional workflows and
+ML inference pipelines. We're looking for a Senior Backend Engineer who is strong in
+Python and distributed systems.
+
+Must-Have
+- 4+ years of Python backend development
+- Experience with Kafka or similar event streaming systems
+- PostgreSQL at scale
+
+Nice-to-Have (NOT required — backend focus is the priority)
+- Familiarity with ML frameworks such as PyTorch or TensorFlow
+- Experience integrating ML model serving into data pipelines
+- MLflow or similar experiment tracking
+
+We do not expect our backend engineers to train models. The ML nice-to-haves are only
+relevant if you happen to have them — strong backend fundamentals are what matters.

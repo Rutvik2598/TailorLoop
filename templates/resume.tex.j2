@@ -1,0 +1,87 @@
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[top=0.65in, bottom=0.65in, left=0.75in, right=0.75in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[colorlinks=true, urlcolor=black, linkcolor=black]{hyperref}
+\usepackage{microtype}
+
+% Section formatting: small caps heading with a rule beneath
+\titleformat{\section}
+  {\normalfont\normalsize\scshape}
+  {}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{8pt}{4pt}
+
+% Compact bullet lists
+\setlist[itemize]{leftmargin=1.5em, topsep=2pt, itemsep=1pt, parsep=0pt}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+% ── Header ───────────────────────────────────────────────────────────────────
+\begin{center}
+  {\Large \textbf{\VAR{profile.name | e}}}\\[3pt]
+  \small
+  \BLOCK{if profile.email}\href{mailto:\VAR{profile.email}}{\VAR{profile.email | e}}\BLOCK{endif}%
+  \BLOCK{if profile.phone} \textbullet{} \VAR{profile.phone | e}\BLOCK{endif}%
+  \BLOCK{if profile.location} \textbullet{} \VAR{profile.location | e}\BLOCK{endif}%
+  \BLOCK{if profile.linkedin} \textbullet{} \href{https://\VAR{profile.linkedin}}{\VAR{profile.linkedin | e}}\BLOCK{endif}%
+  \BLOCK{if profile.github} \textbullet{} \href{https://\VAR{profile.github}}{\VAR{profile.github | e}}\BLOCK{endif}
+\end{center}
+
+% ── Summary ──────────────────────────────────────────────────────────────────
+\BLOCK{if summary}
+\section{Summary}
+\VAR{summary | e}
+\BLOCK{endif}
+
+% ── Experience ───────────────────────────────────────────────────────────────
+\BLOCK{if experience}
+\section{Experience}
+\BLOCK{for job in experience}
+\textbf{\VAR{job.company | e}} \hfill \textit{\VAR{job.start_date | e} -- \VAR{job.end_date | e}}\\
+\textit{\VAR{job.title | e}}\BLOCK{if job.location} \hfill \VAR{job.location | e}\BLOCK{endif}
+\begin{itemize}
+\BLOCK{for bullet in job.bullets}
+  \item \VAR{bullet | e}
+\BLOCK{endfor}
+\end{itemize}
+\BLOCK{if not loop.last}\medskip\BLOCK{endif}
+\BLOCK{endfor}
+\BLOCK{endif}
+
+% ── Projects ─────────────────────────────────────────────────────────────────
+\BLOCK{if projects}
+\section{Projects}
+\BLOCK{for proj in projects}
+\textbf{\VAR{proj.name | e}}\BLOCK{if proj.url} --- \href{\VAR{proj.url}}{\VAR{proj.url | e}}\BLOCK{endif}\\
+\textit{\VAR{proj.tech_stack | join(', ') | e}}
+\begin{itemize}
+\BLOCK{for bullet in proj.bullets}
+  \item \VAR{bullet | e}
+\BLOCK{endfor}
+\end{itemize}
+\BLOCK{if not loop.last}\medskip\BLOCK{endif}
+\BLOCK{endfor}
+\BLOCK{endif}
+
+% ── Education ────────────────────────────────────────────────────────────────
+\BLOCK{if education}
+\section{Education}
+\BLOCK{for edu in education}
+\textbf{\VAR{edu.institution | e}} \hfill \VAR{edu.graduation_year | e}\\
+\textit{\VAR{edu.degree | e} in \VAR{edu.field | e}}\BLOCK{if edu.gpa} \hfill GPA: \VAR{edu.gpa | e}\BLOCK{endif}
+\BLOCK{endfor}
+\BLOCK{endif}
+
+% ── Skills ───────────────────────────────────────────────────────────────────
+\BLOCK{if skills}
+\section{Skills}
+\BLOCK{for skill in skills}\VAR{skill | e}\BLOCK{if not loop.last} \textbullet{} \BLOCK{endif}\BLOCK{endfor}
+\BLOCK{endif}
+
+\end{document}

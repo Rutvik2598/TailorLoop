@@ -1,0 +1,9 @@
+{
+  "name": "Alex Chen",
+  "email": "alex.chen@example.com",
+  "phone": "+1 (555) 204-3817",
+  "location": "San Francisco, CA",
+  "linkedin": "linkedin.com/in/alexchen-dev",
+  "github": "github.com/alexchen-dev",
+  "summary": "Backend-focused software engineer with 6 years of experience building reliable, high-throughput distributed systems in Python and Go. Comfortable across the stack from data pipeline design to API layer, with a track record of measurable improvements in latency and reliability at fintech scale."
+}

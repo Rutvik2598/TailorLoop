@@ -1,0 +1,36 @@
+[
+  {
+    "id": "proj-statsd-exporter",
+    "name": "statsd-exporter",
+    "description": "A lightweight Go service that bridges StatsD metrics to Prometheus exposition format, enabling teams to adopt Prometheus without rewriting existing StatsD instrumentation.",
+    "tech_stack": ["Go", "Prometheus", "StatsD", "Docker"],
+    "bullets": [
+      {
+        "id": "proj-statsd-exporter-b1",
+        "text": "Implemented a UDP listener and tag-based metric translation with configurable mapping rules, sustaining 20,000 metrics/second on a single core."
+      },
+      {
+        "id": "proj-statsd-exporter-b2",
+        "text": "Adopted by 3 internal teams at Apex Fintech to bridge legacy instrumentation into a shared Grafana/Prometheus stack."
+      }
+    ],
+    "url": "https://github.com/alexchen-dev/statsd-exporter"
+  },
+  {
+    "id": "proj-pgmigrate",
+    "name": "pgmigrate",
+    "description": "A minimal CLI tool for managing PostgreSQL schema migrations, designed for teams that want version-controlled SQL without a heavy ORM.",
+    "tech_stack": ["Python", "PostgreSQL", "Click"],
+    "bullets": [
+      {
+        "id": "proj-pgmigrate-b1",
+        "text": "Supports forward and rollback migrations with a lock-based concurrency guard to prevent simultaneous deploys from corrupting schema state."
+      },
+      {
+        "id": "proj-pgmigrate-b2",
+        "text": "Used in production at Apex Fintech to manage 80+ migrations across 4 environments with zero downtime."
+      }
+    ],
+    "url": "https://github.com/alexchen-dev/pgmigrate"
+  }
+]
