@@ -9,7 +9,7 @@ import structlog
 
 from .config import config
 from .graph import pipeline
-from .loaders import load_profile
+from .loaders import load_profile, load_profile_from_db
 from .models import RunState
 from . import compile as compiler
 
@@ -36,7 +36,8 @@ def app() -> None:
 
 @app.command()
 @click.option("--jd", "jd_path", required=True, type=click.Path(exists=True), help="Path to job description text file")
-@click.option("--profile", "profile_dir", required=True, type=click.Path(exists=True), help="Path to profile directory")
+@click.option("--profile", "profile_dir", default=None, type=click.Path(exists=True), help="Path to profile directory (mutually exclusive with --db)")
+@click.option("--db", "db_path", default=None, type=click.Path(), help="Path to SQLite profile DB (mutually exclusive with --profile)")
 @click.option("--out", "out_dir", required=True, type=click.Path(), help="Output directory for PDFs and audit trail")
 @click.option("--max-retries", default=None, type=int, help="Override max verifier retries (default: 2)")
 @click.option("--no-cache", is_flag=True, default=False, help="Disable LLM response cache")
@@ -44,7 +45,8 @@ def app() -> None:
 @click.option("-v", "--verbose", is_flag=True, default=False, help="Verbose logging")
 def run(
     jd_path: str,
-    profile_dir: str,
+    profile_dir: str | None,
+    db_path: str | None,
     out_dir: str,
     max_retries: int | None,
     no_cache: bool,
@@ -53,6 +55,11 @@ def run(
 ) -> None:
     """Run the TailorLoop pipeline: JD + profile → verified resume + cover letter PDFs."""
     _configure_logging(verbose)
+
+    if db_path is None and profile_dir is None:
+        raise click.UsageError("Provide either --profile <dir> or --db <path>.")
+    if db_path and profile_dir:
+        raise click.UsageError("--profile and --db are mutually exclusive.")
 
     # Apply CLI overrides to config
     if max_retries is not None:
@@ -64,7 +71,10 @@ def run(
         config.extraction_model = "gemini-3.1-pro-preview"
 
     jd_text = pathlib.Path(jd_path).read_text(encoding="utf-8")
-    profile = load_profile(pathlib.Path(profile_dir))
+    if db_path:
+        profile = load_profile_from_db(db_path)
+    else:
+        profile = load_profile(pathlib.Path(profile_dir))  # type: ignore[arg-type]
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
 
@@ -125,3 +135,29 @@ def run(
     click.echo(f"resume.pdf        → {out / 'resume.pdf'}")
     click.echo(f"cover_letter.pdf  → {out / 'cover_letter.pdf'}")
     click.echo(f"run.json          → {audit_path}")
+
+
+@app.command()
+@click.option("--profile", "profile_dir", required=True, type=click.Path(exists=True), help="Profile directory with JSON files to import")
+@click.option("--db", "db_path", default="tailorloop.db", show_default=True, help="SQLite DB path to write into")
+def seed(profile_dir: str, db_path: str) -> None:
+    """Seed the SQLite DB from flat JSON profile files (safe to re-run)."""
+    from .db.database import seed_from_profile_dir
+    seed_from_profile_dir(pathlib.Path(profile_dir), db_path)
+    click.echo(f"Seeded {db_path} from {profile_dir}")
+
+
+@app.command()
+@click.option("--db", "db_path", default="tailorloop.db", show_default=True, help="SQLite DB path")
+@click.option("--host", default="127.0.0.1", show_default=True)
+@click.option("--port", default=8000, show_default=True)
+@click.option("--reload", is_flag=True, default=False, help="Auto-reload on code changes (dev mode)")
+def serve(db_path: str, host: str, port: int, reload: bool) -> None:
+    """Start the profile management API server."""
+    import uvicorn
+    from .api.app import create_app
+
+    uvicorn_app = create_app(db_path)
+    click.echo(f"Starting TailorLoop API on http://{host}:{port}  (db={db_path})")
+    click.echo("  Docs: http://{host}:{port}/docs".format(host=host, port=port))
+    uvicorn.run(uvicorn_app, host=host, port=port, reload=reload)

@@ -13,6 +13,21 @@ from .models import (
 )
 
 
+def load_profile_from_db(db_path: str) -> Profile:
+    """Load a Profile from a SQLite database populated by `tailorloop seed`."""
+    from .db.database import get_conn
+    from .db.crud import get_full_profile
+
+    with get_conn(db_path) as conn:
+        profile = get_full_profile(conn)
+
+    if not profile:
+        raise RuntimeError(
+            f"No profile found in {db_path!r}. Run `tailorloop seed --profile <dir> --db {db_path}` first."
+        )
+    return profile
+
+
 def load_profile(profile_dir: pathlib.Path) -> Profile:
     """Load a Profile from a directory of separate JSON files.
 

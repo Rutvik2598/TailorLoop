@@ -15,6 +15,9 @@ uv.lock
 # Pipeline output
 out/
 
+# SQLite profile DB (local data, not committed)
+*.db
+
 # Environment
 .env
 
