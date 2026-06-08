@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from ..db.database import DEFAULT_DB_PATH, get_conn, init_db
 from ..db import crud
 from ..models import BulletVariant, EducationEntry, ExperienceEntry, Profile, ProjectEntry
+from .generate import start_job, get_job, STAGES
 
 
 # ---------------------------------------------------------------------------
@@ -77,6 +80,10 @@ class EducationUpdate(BaseModel):
 
 class SkillCreate(BaseModel):
     skill: str
+
+
+class GenerateRequest(BaseModel):
+    jd_text: str
 
 
 # ---------------------------------------------------------------------------
@@ -245,5 +252,41 @@ def create_app(db_path: str = DEFAULT_DB_PATH) -> FastAPI:
     def delete_skill(skill: str, conn=Depends(get_db)) -> None:
         if not crud.delete_skill(conn, skill):
             raise HTTPException(404, f"Skill {skill!r} not found.")
+
+    # --- Generate ---
+
+    @app.post("/api/generate", status_code=202)
+    def generate(body: GenerateRequest, request: Request) -> Any:
+        if not body.jd_text.strip():
+            raise HTTPException(400, "jd_text is required.")
+        job_id = start_job(body.jd_text, request.app.state.db_path)
+        return {"job_id": job_id}
+
+    @app.get("/api/generate/{job_id}")
+    def generate_status(job_id: str) -> Any:
+        job = get_job(job_id)
+        if not job:
+            raise HTTPException(404, f"Job {job_id!r} not found.")
+        return {
+            "status":        job["status"],
+            "current_stage": job["current_stage"],
+            "stages_done":   job["stages_done"],
+            "error":         job["error"],
+            "has_files":     job["files"] is not None,
+            "stages":        [{"key": s[0], "label": s[1], "desc": s[2]} for s in STAGES],
+        }
+
+    @app.get("/api/generate/{job_id}/download/{filename}")
+    def download_file(job_id: str, filename: str) -> FileResponse:
+        if filename not in ("resume.pdf", "cover_letter.pdf"):
+            raise HTTPException(400, "filename must be resume.pdf or cover_letter.pdf")
+        job = get_job(job_id)
+        if not job or job["status"] != "complete":
+            raise HTTPException(404, "Files not ready yet.")
+        key = "resume" if filename == "resume.pdf" else "cover_letter"
+        path = job["files"][key]
+        if not os.path.exists(path):
+            raise HTTPException(404, "File not found on disk.")
+        return FileResponse(path, media_type="application/pdf", filename=filename)
 
     return app
